@@ -1,0 +1,26 @@
+identity:
+  name: wiki_get_page
+  author: shaba
+  label:
+    en_US: MediaWiki get page
+    ru_RU: "MediaWiki: чтение страницы"
+description:
+  human:
+    en_US: Read a MediaWiki page by title and return clean markdown
+    ru_RU: Прочитать страницу MediaWiki по заголовку и вернуть чистый markdown
+  llm: Fetch the full content of a single MediaWiki page by its exact title and return it as clean markdown. Use after wiki_search to read a specific article. Redirects are followed automatically.
+parameters:
+  - name: title
+    type: string
+    required: true
+    label:
+      en_US: Page title
+      ru_RU: Заголовок страницы
+    human_description:
+      en_US: Exact title of the wiki page to read
+      ru_RU: Точный заголовок страницы вики для чтения
+    llm_description: The exact title of the wiki page to read, e.g. as returned by the wiki_search tool. Redirects are resolved automatically.
+    form: llm
+extra:
+  python:
+    source: tools/wiki_get_page.py

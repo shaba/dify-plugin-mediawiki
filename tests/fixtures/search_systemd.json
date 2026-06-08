@@ -1,0 +1,18 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "searchinfo": {"totalhits": 2},
+    "search": [
+      {
+        "ns": 0,
+        "title": "Systemd",
+        "snippet": "<span class=\"searchmatch\">systemd</span> &mdash; system and service manager"
+      },
+      {
+        "ns": 0,
+        "title": "Systemd/networkd",
+        "snippet": "configure network with <span class=\"searchmatch\">systemd</span>-networkd"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "general": {
+      "sitename": "Sample Wiki",
+      "generator": "MediaWiki 1.39.4",
+      "server": "https://example.com",
+      "articlepath": "/$1"
+    }
+  }
+}

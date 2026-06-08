@@ -1,0 +1,33 @@
+identity:
+  author: shaba
+  name: mediawiki
+  label:
+    en_US: MediaWiki
+    ru_RU: MediaWiki
+  description:
+    en_US: Search and read any MediaWiki site via a configurable base_url
+    ru_RU: Поиск и чтение по любой MediaWiki через настраиваемый base_url
+  icon: icon.svg
+  tags:
+    - productivity
+    - search
+credentials_for_provider:
+  base_url:
+    type: text-input
+    required: true
+    label:
+      en_US: MediaWiki base URL
+      ru_RU: Базовый URL MediaWiki
+    placeholder:
+      en_US: https://example.com
+      ru_RU: https://example.com
+    help:
+      en_US: "URL of the MediaWiki site. A bare domain or a direct .../api.php both work."
+      ru_RU: "URL сайта MediaWiki. Подойдёт голый домен или прямой .../api.php."
+    url: https://example.com
+tools:
+  - tools/wiki_search.yaml
+  - tools/wiki_get_page.yaml
+extra:
+  python:
+    source: provider/mediawiki.py

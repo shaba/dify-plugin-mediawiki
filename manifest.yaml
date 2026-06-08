@@ -1,0 +1,35 @@
+version: 0.1.0
+type: plugin
+author: shaba
+name: mediawiki
+repo: https://github.com/shaba/dify-plugin-mediawiki
+label:
+  en_US: MediaWiki
+  ru_RU: MediaWiki
+description:
+  en_US: "Search and read any MediaWiki site via a configurable base_url."
+  ru_RU: "Поиск и чтение по любой MediaWiki через настраиваемый base_url."
+icon: icon.svg
+resource:
+  memory: 268435456
+  permission:
+    model:
+      enabled: false
+    node:
+      enabled: false
+plugins:
+  tools:
+    - provider/mediawiki.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: 1.0.0
+tags:
+  - productivity
+created_at: "2026-06-07T00:00:00Z"

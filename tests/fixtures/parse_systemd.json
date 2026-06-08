@@ -1,0 +1,7 @@
+{
+  "parse": {
+    "title": "Systemd",
+    "pageid": 12345,
+    "text": "<div class=\"mw-parser-output\"><p><b>systemd</b> &mdash; system and service manager for <i>Linux</i>.<span class=\"mw-editsection\">[<a href=\"/edit\">edit</a>]</span></p>\n<h2>Usage</h2>\n<ul><li>start a service</li><li>enable a service</li></ul>\n<table class=\"navbox\"><tr><td>noise</td></tr></table>\n<script>evil()</script></div>"
+  }
+}
