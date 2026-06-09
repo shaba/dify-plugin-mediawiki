@@ -36,6 +36,11 @@ def test_derive_api_empty_raises():
         derive_api("   ")
 
 
+def test_derive_api_rejects_non_http_scheme():
+    with pytest.raises(NotMediaWiki):
+        derive_api("ftp://example.com/api.php")
+
+
 def test_normalize_server_protocol_relative():
     # The live API returns protocol-relative server for Wikimedia sites.
     assert (

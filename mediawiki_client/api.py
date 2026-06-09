@@ -6,6 +6,9 @@ from .errors import NotMediaWiki
 from .http import VALIDATE_TIMEOUT, Fetch, api_get, default_fetch
 
 
+_ALLOWED_SCHEMES = ("http", "https")
+
+
 def derive_api(base_url: str) -> str:
     """Derive the api.php endpoint from an arbitrary wiki URL.
 
@@ -20,6 +23,10 @@ def derive_api(base_url: str) -> str:
     parsed = urlparse(raw)
     if not parsed.netloc:
         raise NotMediaWiki(f"Invalid base_url: {base_url!r}")
+    if parsed.scheme not in _ALLOWED_SCHEMES:
+        raise NotMediaWiki(
+            f"Unsupported URL scheme {parsed.scheme!r} (only http/https are allowed)"
+        )
     path = parsed.path.split("?")[0]
     if path.rstrip("/").endswith("api.php"):
         return f"{parsed.scheme}://{parsed.netloc}{path.rstrip('/')}"
