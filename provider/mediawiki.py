@@ -4,6 +4,7 @@ from dify_plugin import ToolProvider
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 
 from mediawiki_client import validate_mediawiki
+from mediawiki_client.http import VALIDATE_TIMEOUT
 
 
 class MediaWikiProvider(ToolProvider):
@@ -14,6 +15,6 @@ class MediaWikiProvider(ToolProvider):
                 "base_url is required (e.g. https://example.com)"
             )
         try:
-            validate_mediawiki(base_url, timeout=15)
+            validate_mediawiki(base_url, timeout=VALIDATE_TIMEOUT)
         except Exception as exc:  # noqa: BLE001 — surface the cause to the user
             raise ToolProviderCredentialValidationError(str(exc)) from exc
