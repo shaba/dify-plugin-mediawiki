@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from .api import derive_api, siteinfo
+from .api import derive_api, normalize_server, siteinfo
 from .errors import PageNotFound
 from .htmlmd import html_to_markdown
-from .http import Fetch, api_get, default_fetch
+from .http import DEFAULT_TIMEOUT, Fetch, api_get, default_fetch
 from .search import page_url
 
 
@@ -14,7 +14,7 @@ def get_page(
     base_url: str,
     *,
     fetch: Fetch = default_fetch,
-    timeout: int = 30,
+    timeout: int = DEFAULT_TIMEOUT,
 ) -> dict[str, Any]:
     """Fetch an article via action=parse&prop=text (following redirects) and return markdown.
 
@@ -49,14 +49,21 @@ def get_page(
     text = parse.get("text")
     if isinstance(text, dict):  # formatversion=1 returns {"*": html}
         text = text.get("*", "")
-    markdown = html_to_markdown(str(text or ""))
     resolved_title = str(parse.get("title") or title)
 
+    # siteinfo gives us server (to resolve relative link hrefs in the article HTML)
+    # and articlepath (to build the canonical source_url). Best-effort: a failure
+    # here must not lose the article body.
+    server = ""
+    source_url = ""
     try:
         info = siteinfo(api_url, fetch=fetch, timeout=timeout)
-        source_url = page_url(info["server"], info["articlepath"], resolved_title)
-    except Exception:  # noqa: BLE001 — source_url is not critical
-        source_url = ""
+        server = normalize_server(info["server"], api_url)
+        source_url = page_url(server, info["articlepath"], resolved_title)
+    except Exception:  # noqa: BLE001 — site metadata is not critical to the body
+        pass
+
+    markdown = html_to_markdown(str(text or ""), server=server)
 
     return {
         "title": resolved_title,

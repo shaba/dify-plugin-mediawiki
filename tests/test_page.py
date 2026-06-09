@@ -159,6 +159,26 @@ def test_get_page_returns_markdown(parse_payload, siteinfo_payload):
     assert page["source_url"] == "https://example.com/Systemd"
 
 
+def test_get_page_formatversion1_text_dict(siteinfo_payload):
+    fv1 = {"parse": {"title": "Systemd", "text": {"*": "<p><b>hi</b></p>"}}}
+    fetch = make_router({"action=parse": fv1, "meta=siteinfo": siteinfo_payload})
+    page = get_page("Systemd", "https://example.com", fetch=fetch)
+    assert "**hi**" in page["markdown"]
+    assert page["source_url"] == "https://example.com/Systemd"
+
+
+def test_get_page_resolves_relative_links(siteinfo_payload):
+    payload = {
+        "parse": {
+            "title": "Systemd",
+            "text": '<p>see <a href="/wiki/Networkd">Networkd</a></p>',
+        }
+    }
+    fetch = make_router({"action=parse": payload, "meta=siteinfo": siteinfo_payload})
+    page = get_page("Systemd", "https://example.com", fetch=fetch)
+    assert "[Networkd](https://example.com/wiki/Networkd)" in page["markdown"]
+
+
 def test_get_page_missing_raises(parse_missing_payload):
     fetch = make_router({"action=parse": parse_missing_payload})
     with pytest.raises(PageNotFound):
