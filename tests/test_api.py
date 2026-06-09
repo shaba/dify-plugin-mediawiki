@@ -1,7 +1,7 @@
 import pytest
 
 from mediawiki_client import derive_api
-from mediawiki_client.api import normalize_server, validate_mediawiki
+from mediawiki_client.api import normalize_server, redact_userinfo, validate_mediawiki
 from mediawiki_client.errors import NotMediaWiki
 
 from .conftest import make_router
@@ -54,6 +54,22 @@ def test_normalize_server_empty_uses_api_origin():
     assert (
         normalize_server("", "https://example.com/w/api.php") == "https://example.com"
     )
+
+
+def test_redact_userinfo_strips_credentials():
+    assert (
+        redact_userinfo("https://admin:dummy-password@internal.local/api.php")
+        == "https://internal.local/api.php"
+    )
+
+
+def test_validate_mediawiki_message_does_not_leak_password():
+    def fetch(url, timeout=30):
+        raise ConnectionError("refused")
+
+    with pytest.raises(NotMediaWiki) as exc:
+        validate_mediawiki("https://admin:dummy-password@internal.local", fetch=fetch)
+    assert "dummy-password" not in str(exc.value)
 
 
 def test_validate_mediawiki_ok(siteinfo_payload):

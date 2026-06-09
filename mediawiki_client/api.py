@@ -9,6 +9,16 @@ from .http import VALIDATE_TIMEOUT, Fetch, api_get, default_fetch
 _ALLOWED_SCHEMES = ("http", "https")
 
 
+def redact_userinfo(url: str) -> str:
+    """Drop any ``user:pass@`` userinfo from a URL for safe display in messages."""
+    parsed = urlparse(url)
+    if "@" in parsed.netloc:
+        host = parsed.netloc.rsplit("@", 1)[1]
+        parsed = parsed._replace(netloc=host)
+        return parsed.geturl()
+    return url
+
+
 def derive_api(base_url: str) -> str:
     """Derive the api.php endpoint from an arbitrary wiki URL.
 
@@ -92,12 +102,13 @@ def validate_mediawiki(
     Returns siteinfo on success, otherwise raises NotMediaWiki.
     """
     api_url = derive_api(base_url)
+    safe_url = redact_userinfo(api_url)
     try:
         info = siteinfo(api_url, fetch=fetch, timeout=timeout)
     except Exception as exc:  # noqa: BLE001 — wrap the cause in a clear error
-        raise NotMediaWiki(f"Site unreachable at {api_url}: {exc}") from exc
+        raise NotMediaWiki(f"Site unreachable at {safe_url}: {exc}") from exc
     if "mediawiki" not in info["generator"].lower():
         raise NotMediaWiki(
-            f"{api_url} does not look like MediaWiki (generator={info['generator'] or 'none'})"
+            f"{safe_url} does not look like MediaWiki (generator={info['generator'] or 'none'})"
         )
     return info
