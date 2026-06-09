@@ -5,8 +5,8 @@ import re
 from typing import Any
 from urllib.parse import quote
 
-from .api import derive_api, siteinfo
-from .http import Fetch, api_get, default_fetch
+from .api import derive_api, normalize_server, siteinfo_from_query
+from .http import DEFAULT_TIMEOUT, Fetch, api_get, default_fetch
 
 _TAG_RE = re.compile(r"<[^>]+>")
 
@@ -30,7 +30,7 @@ def search(
     *,
     limit: int = 5,
     fetch: Fetch = default_fetch,
-    timeout: int = 30,
+    timeout: int = DEFAULT_TIMEOUT,
 ) -> list[dict[str, Any]]:
     """Full-text search via action=query&list=search.
 
@@ -38,6 +38,8 @@ def search(
     """
     api_url = derive_api(base_url)
     limit = max(1, min(int(limit or 5), 50))
+    # Combine the search with meta=siteinfo in a single api.php request, so result
+    # URLs can be built from server+articlepath without a second round-trip.
     data = api_get(
         api_url,
         {
@@ -46,14 +48,17 @@ def search(
             "srsearch": query,
             "srlimit": limit,
             "srprop": "snippet",
+            "meta": "siteinfo",
+            "siprop": "general",
         },
         fetch=fetch,
         timeout=timeout,
     )
-    hits = (data.get("query") or {}).get("search") or []
+    query_block = data.get("query") or {}
+    hits = query_block.get("search") or []
 
-    info = siteinfo(api_url, fetch=fetch, timeout=timeout)
-    server = info["server"] or f"{derive_api(base_url).rsplit('/', 1)[0]}"
+    info = siteinfo_from_query(query_block)
+    server = normalize_server(info["server"], api_url)
     articlepath = info["articlepath"]
 
     results: list[dict[str, Any]] = []

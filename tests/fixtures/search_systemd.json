@@ -13,6 +13,12 @@
         "title": "Systemd/networkd",
         "snippet": "configure network with <span class=\"searchmatch\">systemd</span>-networkd"
       }
-    ]
+    ],
+    "general": {
+      "sitename": "Sample Wiki",
+      "generator": "MediaWiki 1.39.4",
+      "server": "https://example.com",
+      "articlepath": "/$1"
+    }
   }
 }
