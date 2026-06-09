@@ -37,6 +37,7 @@ def get_page(
         },
         fetch=fetch,
         timeout=timeout,
+        check_error=False,
     )
 
     error = data.get("error")

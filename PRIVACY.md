@@ -9,7 +9,7 @@ personal data to the plugin author or any third party.
   you choose. It is stored by your Dify instance, not by the plugin author.
 - When you invoke a tool, the plugin sends HTTP GET requests **only** to that
   `base_url` (its `api.php` endpoint), carrying the search query or page title
-  you provided. Requests use the User-Agent `dify-plugin-mediawiki/0.0.1`.
+  you provided. Requests use the User-Agent `dify-plugin-mediawiki/0.1.0`.
 - No analytics, telemetry or external hosts are involved. No data is persisted
   by the plugin itself.
 
@@ -25,7 +25,7 @@ the MediaWiki site configured in `base_url`.
   хранится вашим экземпляром Dify, а не автором плагина.
 - При вызове инструмента плагин отправляет HTTP GET-запросы **только** на этот
   `base_url` (его endpoint `api.php`), передавая ваш поисковый запрос или
-  заголовок страницы. Запросы используют User-Agent `dify-plugin-mediawiki/0.0.1`.
+  заголовок страницы. Запросы используют User-Agent `dify-plugin-mediawiki/0.1.0`.
 - Никакой аналитики, телеметрии или внешних хостов. Сам плагин ничего не сохраняет.
 
 Ваши запросы и читаемый контент подпадают под политику конфиденциальности сайта
