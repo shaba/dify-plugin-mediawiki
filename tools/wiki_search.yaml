@@ -33,6 +33,24 @@ parameters:
       ru_RU: Максимум результатов (1-50, по умолчанию 5)
     llm_description: Maximum number of search results to return (1-50). Default 5.
     form: form
+output_schema:
+  type: object
+  properties:
+    query:
+      type: string
+    count:
+      type: integer
+    results:
+      type: array
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+          snippet:
+            type: string
+          url:
+            type: string
 extra:
   python:
     source: tools/wiki_search.py

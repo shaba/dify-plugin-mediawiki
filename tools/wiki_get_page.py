@@ -1,10 +1,11 @@
 from collections.abc import Generator
 from typing import Any
 
+import requests
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
 
-from mediawiki_client import PageNotFound, get_page
+from mediawiki_client import MediaWikiError, PageNotFound, get_page
 
 
 class GetPageTool(Tool):
@@ -24,7 +25,7 @@ class GetPageTool(Tool):
         except PageNotFound as exc:
             yield self.create_text_message(str(exc))
             return
-        except Exception as exc:  # noqa: BLE001
+        except (MediaWikiError, requests.RequestException) as exc:
             yield self.create_text_message(f"MediaWiki request error: {exc}")
             return
 

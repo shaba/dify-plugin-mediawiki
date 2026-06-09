@@ -1,10 +1,11 @@
 from collections.abc import Generator
 from typing import Any
 
+import requests
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
 
-from mediawiki_client import format_search, search
+from mediawiki_client import MediaWikiError, format_search, search
 
 
 class SearchTool(Tool):
@@ -25,7 +26,7 @@ class SearchTool(Tool):
 
         try:
             results = search(base_url, query, limit=limit)
-        except Exception as exc:  # noqa: BLE001
+        except (MediaWikiError, requests.RequestException) as exc:
             yield self.create_text_message(f"MediaWiki request error: {exc}")
             return
 

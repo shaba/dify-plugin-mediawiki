@@ -21,6 +21,15 @@ parameters:
       ru_RU: Точный заголовок страницы вики для чтения
     llm_description: The exact title of the wiki page to read, e.g. as returned by the wiki_search tool. Redirects are resolved automatically.
     form: llm
+output_schema:
+  type: object
+  properties:
+    title:
+      type: string
+    markdown:
+      type: string
+    source_url:
+      type: string
 extra:
   python:
     source: tools/wiki_get_page.py
