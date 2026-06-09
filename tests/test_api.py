@@ -1,7 +1,7 @@
 import pytest
 
 from mediawiki_client import derive_api
-from mediawiki_client.api import validate_mediawiki
+from mediawiki_client.api import normalize_server, validate_mediawiki
 from mediawiki_client.errors import NotMediaWiki
 
 from .conftest import make_router
@@ -34,6 +34,21 @@ def test_derive_api_strips_query():
 def test_derive_api_empty_raises():
     with pytest.raises(NotMediaWiki):
         derive_api("   ")
+
+
+def test_normalize_server_protocol_relative():
+    # The live API returns protocol-relative server for Wikimedia sites.
+    assert (
+        normalize_server("//en.wikipedia.org", "https://en.wikipedia.org/w/api.php")
+        == "https://en.wikipedia.org"
+    )
+
+
+def test_normalize_server_empty_uses_api_origin():
+    # Falls back to the api_url origin, not a stripped path segment.
+    assert (
+        normalize_server("", "https://example.com/w/api.php") == "https://example.com"
+    )
 
 
 def test_validate_mediawiki_ok(siteinfo_payload):
