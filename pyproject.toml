@@ -1,6 +1,6 @@
 [project]
 name = "dify-plugin-mediawiki"
-version = "0.1.0"
+version = "0.1.1"
 description = "Search and read pages on any MediaWiki site"
 readme = "README.md"
 requires-python = ">=3.12"
